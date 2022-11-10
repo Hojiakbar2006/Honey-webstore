@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./Assets/Css/Global.css";
 import axios from "axios";
 import { Router } from "./Router";
-import { Login } from "./Pages/Login/Login";
+// import { Login } from "./Pages/Login/Login";
 
 
 export function App() {
