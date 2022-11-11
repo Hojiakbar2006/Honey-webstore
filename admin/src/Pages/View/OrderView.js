@@ -36,7 +36,7 @@ export function OrderView() {
         <div>
           <h3>{orderView.name}</h3>
           <h3>Vaqti: {date}</h3>
-          <h3>Narxi: {orderView.price} 000 sum</h3>
+          <h3>Narxi: {orderView.price} sum</h3>
           <h3>Xudud: {orderView.territory}</h3>
           <h3>Telfon: {orderView.phone}</h3>
           <h3>ko'rishlar soni: {orderView.view}</h3>

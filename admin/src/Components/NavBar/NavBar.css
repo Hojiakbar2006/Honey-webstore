@@ -253,6 +253,7 @@
   border-radius: 8px;
   transition: all 0.3s ease;
   border: 1px solid #858585ab;
+  cursor: pointer;
 }
 
 .notifModal1 > div:hover {

@@ -51,7 +51,7 @@ export function NavBar() {
 
   return (
     <nav id="navBar">
-      <div className="profile">
+      <div className="profile" onClick={()=>navigate("/")}>
         <button className="menubtn" onClick={() => setOpenApp(!openApp)}>
           <img width="40px" src={menu} alt="menu" />
         </button>

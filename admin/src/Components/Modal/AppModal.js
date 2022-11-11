@@ -1,9 +1,9 @@
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
-import logOut from "../../Assets/Images/logOut.svg"
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import logOut from "../../Assets/Images/logOut.svg";
 
-
-export function AppBar({data, open, setOpen}) {
+export function AppBar({ data, open, setOpen }) {
+  const navigate = useNavigate();
 
   return (
     <div
@@ -12,19 +12,18 @@ export function AppBar({data, open, setOpen}) {
     >
       <div className={open ? "appBar openApp" : "appBar"}>
         <div>
-        <div className="AppProfile">
-          <figure></figure>
-          <div>
-            <h3>Nasriddinov Hojiakbar</h3>
-            <p>Tizim admini</p>
+          <div className="AppProfile" onClick={() => navigate("/")}>
+            <figure></figure>
+            <div>
+              <h3>Nasriddinov Hojiakbar</h3>
+              <p>Tizim admini</p>
+            </div>
           </div>
-        </div>
           {data.map((item, index) => (
             <NavLink className="navBtn" key={index} to={item.linkName}>
               <img width="30px" src={item.img} alt="" />
               {item.name}
             </NavLink>
-            
           ))}
         </div>
         <Link to="">
@@ -35,4 +34,3 @@ export function AppBar({data, open, setOpen}) {
     </div>
   );
 }
-
