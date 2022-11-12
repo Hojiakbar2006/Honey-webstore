@@ -23,7 +23,7 @@ export function MoreSeen({ data }) {
               </div>
               <button
                 onClick={() => {
-                  setDetail(item);
+                  setDetail({...item, img:item.img[0]||[]});
                   setOpen(!open);
                 }}
               >

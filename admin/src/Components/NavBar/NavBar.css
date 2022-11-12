@@ -168,28 +168,32 @@
 }
 
 .AppModalCard {
-  width: 0;
+  width: 100%;
   height: 100%;
-  position: absolute;
-  background: #0000002e;
+  position: fixed;
+  background: #0000001a;
   left: 0;
   top: 0;
   transition: all 0.5s ease-in-out;
   z-index: 1;
+    opacity: 0;
+  z-index: -1;
 }
 .NotifModalCard {
-  width: 0;
+  width: 100%;
   height: 100%;
-  position: absolute;
-  background: #0000002e;
+  position: fixed;
+  background: #0000001a;
   right: 0;
   top: 0;
   transition: all 0.5s ease-in-out;
-  z-index: 1;
+  opacity: 0;
+  z-index: -1;
 }
 
 .open {
-  width: 100%;
+  opacity: 1;
+  z-index: 1;
 }
 
 .appBar {
@@ -218,6 +222,7 @@
   position: fixed;
   top: 0;
   right: 0;
+  
 }
 
 .notifModal1 > button {

@@ -6,6 +6,7 @@ import addIcon from "../../Assets/Images/Add Img.svg";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { acLoading } from "../../Redux/Loading";
+import { acRelodeProduct } from "../../Redux/Product";
 
 export function AddProduct() {
   const [imagesData, setImagesData] = useState([]);
@@ -44,8 +45,10 @@ export function AddProduct() {
             .then((res) => {
               toast(res.data.message);
               dispatch(acLoading(false));
+              dispatch(acRelodeProduct());
             })
             .catch((err) => {
+              dispatch(acRelodeProduct());
               toast(err.reponse.message);
             });
           setProduct({

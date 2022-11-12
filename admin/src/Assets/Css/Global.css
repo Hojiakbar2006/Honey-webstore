@@ -43,3 +43,7 @@ body {
   align-items: center;
   background-color: #ffffff;
 }
+
+::-webkit-scrollbar{
+  display: none;
+}

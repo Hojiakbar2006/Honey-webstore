@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { acLoading } from "../../Redux/Loading";
 
 export function OrderView() {
-  const [orderView, setOrderView] = useState([]);
+  const [data, setData] = useState({});
   const Location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const id = Location.pathname.split("/").pop();
 
   useEffect(() => {
@@ -15,7 +20,7 @@ export function OrderView() {
         },
       })
       .then((res) => {
-        setOrderView(res.data);
+        setData({...res.data, img:res.data.img[0]});
       })
       .catch((err) => {
         console.log(err);
@@ -23,30 +28,74 @@ export function OrderView() {
   }, [id]);
 
   const date =
-    new Date(orderView.date).toLocaleDateString() +
+    new Date(data.date).toLocaleDateString() +
     " " +
-    new Date(orderView.date).toLocaleTimeString();
+    new Date(data.date).toLocaleTimeString();
 
   return (
     <section id="viewSection">
       <div>
         <figure>
-          <img src={orderView.img} alt="" />
+          <img src={data.img} alt="" />
         </figure>
         <div>
-          <h3>{orderView.name}</h3>
+          <h3>{data.name}</h3>
           <h3>Vaqti: {date}</h3>
-          <h3>Narxi: {orderView.price} sum</h3>
-          <h3>Xudud: {orderView.territory}</h3>
-          <h3>Telfon: {orderView.phone}</h3>
-          <h3>ko'rishlar soni: {orderView.view}</h3>
+          <h3>Narxi: {data.price} sum</h3>
+          <h3>Xudud: {data.territory}</h3>
+          <h3>Telfon: {data.phone}</h3>
+          <h3>ko'rishlar soni: {data.view}</h3>
           <h3>
             Buyurtma xolati:{" "}
-            {orderView.status === 0 ? "Tasdiqlanmagan" : "Tasdiqlangan"}
+            {data.status === 0 ? "Tasdiqlanmagan" : "Tasdiqlangan"}
           </h3>
           <div className="btn-group">
-            <button>Buyurtmani bekor qilish</button>
-            <button>Buyurtmani Tasdiqlash</button>
+            <button
+              onClick={() => {
+                dispatch(acLoading(true));
+                axios(`https://honey.pandashop.uz/order/delete`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    token: "Admin tokeni",
+                    id: id,
+                  },
+                })
+                  .then((res) => {
+                    toast(res.data.message);
+                    navigate(-1);
+                    dispatch(acLoading(false));
+                  })
+                  .catch((err) => {
+                    console.log(err.response.data.message);
+                  });
+              }}
+            >
+              Buyurtmani bekor qilish
+            </button>
+            <button
+              onClick={() => {
+                dispatch(acLoading(true));
+                axios(`https://honey.pandashop.uz/order/confirmation`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    token: "Admin tokeni",
+                    id: id,
+                  },
+                })
+                  .then((res) => {
+                    toast(res.data.message);
+                    navigate(-1);
+                    dispatch(acLoading(false));
+                  })
+                  .catch((err) => {
+                    console.log(err.response.data.message);
+                  });
+              }}
+            >
+              Buyurtmani Tasdiqlash
+            </button>
           </div>
         </div>
       </div>

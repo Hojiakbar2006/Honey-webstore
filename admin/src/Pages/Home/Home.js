@@ -4,7 +4,6 @@ import { MoreSeen } from "../../Components/MoreSeen/MoreSeen";
 import { Chart } from "../../Components/Chart/Chart";
 import "./Home.css";
 import { useSelector } from "react-redux";
-import { Loading } from "../../Components/Loading/Loading";
 import axios from "axios";
 
 export function Home() {
@@ -33,11 +32,9 @@ export function Home() {
         console.log(err);
       });
   }, []);
-        const now = new Date().toLocaleDateString();
+  const now = new Date().toLocaleDateString();
 
-  console.log(now);
-
-  
+  // console.log(now);
 
   const infoData = [
     {
@@ -60,12 +57,8 @@ export function Home() {
       cardName: "Sayt mexmonlari",
       total: guests.map((item) => {
         const date = item.date;
-        console.log(date);
-        // console.log(now);
         return (
-          <p key={item.id}>
-            {date === now ? item.quantity + " nafar" : ""}
-          </p>
+          <p key={item.id}>{date === now ? item.quantity + " nafar" : ""}</p>
         );
       }),
     },
@@ -77,7 +70,7 @@ export function Home() {
     {
       id: 6,
       cardName: "Ko'rilganlar",
-      total: `${info.viewLen}`,
+      total: `${info.viewLen} marta`,
     },
   ];
   const labels = [];
@@ -96,7 +89,7 @@ export function Home() {
     ],
   };
   guests.map((item) => {
-    labels.push(item.date);
+    labels.push(item.date.split("/").slice(0, 2).join("/"));
     amaunt.push(item.quantity);
     return null;
   });
@@ -105,7 +98,6 @@ export function Home() {
       <InfCard data={infoData} />
       <MoreSeen data={moreSeen} />
       <Chart data={data} />
-      <Loading />
     </section>
   );
 }

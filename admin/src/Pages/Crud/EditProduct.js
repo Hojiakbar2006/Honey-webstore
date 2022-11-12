@@ -3,70 +3,76 @@ import trash from "../../Assets/Images/trash.svg";
 import addIcon from "../../Assets/Images/Add Img.svg";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { acLoading, acUpload } from "../../Redux/Loading";
 
 export function EditProduct() {
   const [imagesData, setImagesData] = useState([]);
+  const [reload, setReload] = useState(false);
   const [images, setImages] = useState([]);
+  const [imageDelete, setImageDelete] = useState([]);
   const [product, setProduct] = useState({});
+
   const Location = useLocation();
   const id = Location.pathname.split("/").pop();
-  
- 
-console.log(images);  
-console.log(imagesData);
+  const dispatch = useDispatch();
 
- function updateImg() {
-   const formData = new FormData();
-   const newImgArr = [];
-   const deleteImg = []; // img url
-
-   for (let i = 0; i < newImgArr.length; i++) {
-     formData.append("img", newImgArr[i]);
-   }
-   formData.append("data", JSON.stringify({ delete: [...deleteImg] }));
-
-   axios(`https://honey.pandashop.uz/product/update/img/${id}`, {
-     headers: {
-       "Content-Type": "multipart/form-data",
-       token: "Admin tokeni",
-     },
-     data: formData,
-   })
-     .then((res) => {
-       console.log(res.data.data);
-     })
-     .catch((err) => {
-       console.log(err.response.data.message);
-     });
- }
-
-
-  
   useEffect(() => {
+    dispatch(acLoading(true));
     axios
-      .get(`https://honey.pandashop.uz/product/view/${id}`, {
+    .get(`https://honey.pandashop.uz/product/view/${id}`, {
+      headers: {
+        token: "token",
+      },
+    })
+    .then((res) => {
+      toast(res.data.message);
+      setProduct(res.data);
+      setImagesData(res.data.img || []);
+      setImages(res.data.img || []);
+      dispatch(acLoading(false));
+    })
+    .catch((err) => {
+      toast(err.response.message);
+      dispatch(acLoading(false));
+    });
+  }, [id, reload, dispatch]);
+  
+  
+    function updateImg() {
+      const formData = new FormData();
+      const newImgArr = [...images];
+      const deleteImg = [imageDelete]; // img url
+  
+      for (let i = 0; i < newImgArr.length; i++) {
+        formData.append("img", newImgArr[i]);
+      }
+      formData.append("data", JSON.stringify({ delete: [...deleteImg] }));
+  
+      axios(`https://honey.pandashop.uz/product/update/img/${id}`, {
+        method: "POST",
         headers: {
-          token: "token",
+          "Content-Type": "multipart/form-data",
+          token: "Admin tokeni",
+        },
+        data: formData,
+        onUploadProgress: (e) => {
+          dispatch(acUpload({ jami: e.total, yuklandi: e.loaded, start:e.total!==e.loaded}));
+          console.log(e.total!==e.loaded);
         },
       })
-      .then((res) => {
-        toast(res.data.message)
-        setProduct(res.data)
-        setImagesData(res.data.img || []);
-      })
-      .catch((err) => {
-       toast(err.response.message);
-      });
-  }, [id]);
-
-//   useEffect(()=>{
-     
-
-// })
-
-
-const data = product
+        .then((res) => {
+          console.log(res.data);
+          dispatch(acUpload({ jami: 0, yuklandi: 0, start: false }));
+          setReload(!reload);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+          dispatch(acUpload({ jami: 0, yuklandi: 0, start: false }));
+        });
+    }
+  const data = product;
   return (
     <section id="crudContainer">
       <form
@@ -82,10 +88,12 @@ const data = product
           })
             .then((res) => {
               toast(res.data.message);
+              setReload(!reload);
             })
             .catch((err) => {
               console.log(err.response.data.message);
             });
+          updateImg();      
         }}
       >
         <input
@@ -132,8 +140,8 @@ const data = product
                   type="button"
                   className="trashBtn"
                   onClick={() => {
-                    setImagesData(imagesData.filter((item, i) => i !== index));
-                    updateImg().newImgArr.push(URL.createObjectURL(img));
+                    setImagesData(imagesData.filter((img, i) => i !== index));
+                    setImageDelete(img.img);
                   }}
                 >
                   <img src={trash} alt="trash" />
@@ -151,14 +159,14 @@ const data = product
               accept="image/png, image/jpeg, image/jpg"
               multiple="multiple"
               onChange={(e) => {
-                setImages(URL.createObjectURL([...images, ...e.target.files]));
+                setImages([...images, ...e.target.files]);
                 const MyFiles = [...imagesData];
                 for (let i = 0; i < e.target.files.length; i++) {
                   if (MyFiles.length < 4) {
-                    MyFiles.push(e.target.files[i]);
+                    MyFiles.push(URL.createObjectURL(e.target.files[i]));
                   } else {
                     MyFiles.splice(0, 1);
-                    MyFiles.push(e.target.files[i]);
+                    MyFiles.push(URL.createObjectURL(e.target.files[i]));
                   }
                 }
                 setImagesData(MyFiles);

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { acProduct } from "../Redux/Product";
 import { acMoreSeen } from "../Redux/MoreSeen";
 import { acOrder } from "../Redux/Order";
@@ -9,6 +9,8 @@ import { acLoading } from "../Redux/Loading";
 
 export function Config() {
   const dispatch = useDispatch();
+
+  const relodeProduct = useSelector((state) => state.relodeProduct);
 
   useEffect(() => {
     dispatch(acLoading(true));
@@ -26,7 +28,7 @@ export function Config() {
         console.log(err);
         dispatch(acLoading(false));
       });
-  }, [dispatch]);
+  }, [dispatch, relodeProduct]);
 
   useEffect(() => {
     dispatch(acLoading(true));
@@ -44,7 +46,7 @@ export function Config() {
         console.log(err);
         dispatch(acLoading(true));
       });
-  }, [dispatch]);
+  }, [dispatch, relodeProduct]);
 
   useEffect(() => {
     dispatch(acLoading(true));
@@ -66,7 +68,7 @@ export function Config() {
 
   useEffect(() => {
     dispatch(acLoading(true));
-    axios(`https://honey.pandashop.uz/guest/view`)
+    axios(`https://honey.pandashop.uz/guest/view/10`)
       .then((res) => {
         dispatch(acGuest(res.data));
         dispatch(acLoading(false));
@@ -75,7 +77,7 @@ export function Config() {
         console.log(err);
         dispatch(acLoading(false));
       });
-  }, [dispatch]);
+  }, [dispatch, relodeProduct]);
 
   return null;
 }

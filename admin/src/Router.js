@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Home } from "./Pages/Home/Home";
 import { NavBar } from "./Components/NavBar/NavBar";
@@ -9,6 +9,7 @@ import { ProductView } from "./Pages/View/ProductView";
 import { AddProduct } from "./Pages/Crud/AddProduct";
 import Product from "./Pages/Product/Product";
 import { EditProduct } from "./Pages/Crud/EditProduct";
+import { Loading } from "./Components/Loading/Loading";
 
 export function Router() {
   return (
@@ -24,6 +25,7 @@ export function Router() {
         <Route path="/product_view/:id" element={<ProductView />} />
       </Routes>
       <Config />
+      <Loading />
     </>
   );
 }

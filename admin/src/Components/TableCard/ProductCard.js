@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { acLoading } from "../../Redux/Loading";
+import { acRelodeProduct } from "../../Redux/Product";
 
 export function ProductCard({ data }) {
   const navigate = useNavigate();
@@ -22,10 +23,12 @@ export function ProductCard({ data }) {
     })
       .then((res) => {
         toast(res.data.message);
-        dispatch(acLoading(true));
+        dispatch(acLoading(false));
+        dispatch(acRelodeProduct());
       })
       .catch((err) => {
         toast(err.response.data);
+        dispatch(acRelodeProduct());
       });
   };
 

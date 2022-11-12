@@ -1,18 +1,22 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { reProduct } from "./Product";
+import { reProduct, reRelodeProduct } from "./Product";
 import { reMoreSeen } from "./MoreSeen";
 import { reSearch } from "./Search";
-import { reOrder } from './Order';
+import { reOrder } from "./Order";
 import { reGuest } from "./Guest";
-import { reLoading } from "./Loading";
+import { reLoading, reUpload } from "./Loading";
+import { reAdmin } from "./Admin";
 
 const reducer = combineReducers({
-  loading:reLoading,
+  loading: reLoading,
   product: reProduct,
   moreSeen: reMoreSeen,
   search: reSearch,
   order: reOrder,
-  guest: reGuest
+  guest: reGuest,
+  upload: reUpload,
+  admin: reAdmin,
+  relodeProduct: reRelodeProduct,
 });
 
 export const Store = configureStore({

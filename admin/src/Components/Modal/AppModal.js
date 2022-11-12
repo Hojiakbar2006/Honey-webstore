@@ -26,7 +26,11 @@ export function AppBar({ data, open, setOpen }) {
             </NavLink>
           ))}
         </div>
-        <Link to="">
+        <Link to="" onClick={()=>{
+          window.location.reload()
+          sessionStorage.clear()
+          localStorage.clear()
+        }}>
           <img width="30px" src={logOut} alt="" />
           Log out
         </Link>

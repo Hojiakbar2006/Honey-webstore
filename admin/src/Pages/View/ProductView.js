@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 
 export function ProductView() {
   const [productView, setProductView] = useState([]);
+  const [img, setImg] = useState("");
   const Location = useLocation();
   const id = Location.pathname.split("/").pop();
 
@@ -17,6 +18,7 @@ export function ProductView() {
       })
       .then((res) => {
         setProductView(res.data);
+        setImg(res.data.img[0])
       })
       .catch((err) => {
         console.log(err);
@@ -31,7 +33,7 @@ export function ProductView() {
     <section id="viewSection">
       <div>
         <figure>
-          <img src={productView.img} alt="" />
+          <img src={img} alt="" />
         </figure>
         <div>
           <h3>{productView.name}</h3>

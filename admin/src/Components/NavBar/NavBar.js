@@ -48,16 +48,23 @@ export function NavBar() {
       img: orderImg,
     },
   ];
+  if (openApp) {
+    document.querySelector("body").style.position = "fixed"
+  }else if (openNotif) {
+    document.querySelector("body").style.position = "fixed";
+  }else{
+    document.querySelector("body").style.position = "";
+  }
 
   return (
     <nav id="navBar">
-      <div className="profile" onClick={()=>navigate("/")}>
+      <div className="profile">
         <button className="menubtn" onClick={() => setOpenApp(!openApp)}>
           <img width="40px" src={menu} alt="menu" />
         </button>
 
-        <figure></figure>
-        <div>
+        <figure onClick={() => navigate("/")}></figure>
+        <div onClick={() => navigate("/")}>
           <h3>Nasriddinov Hojiakbar</h3>
           <p>Tizim admini</p>
         </div>
