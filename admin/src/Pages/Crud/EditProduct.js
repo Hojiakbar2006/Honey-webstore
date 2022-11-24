@@ -21,57 +21,62 @@ export function EditProduct() {
   useEffect(() => {
     dispatch(acLoading(true));
     axios
-    .get(`https://honey.pandashop.uz/product/view/${id}`, {
-      headers: {
-        token: "token",
-      },
-    })
-    .then((res) => {
-      toast(res.data.message);
-      setProduct(res.data);
-      setImagesData(res.data.img || []);
-      setImages(res.data.img || []);
-      dispatch(acLoading(false));
-    })
-    .catch((err) => {
-      toast(err.response.message);
-      dispatch(acLoading(false));
-    });
-  }, [id, reload, dispatch]);
-  
-  
-    function updateImg() {
-      const formData = new FormData();
-      const newImgArr = [...images];
-      const deleteImg = [imageDelete]; // img url
-  
-      for (let i = 0; i < newImgArr.length; i++) {
-        formData.append("img", newImgArr[i]);
-      }
-      formData.append("data", JSON.stringify({ delete: [...deleteImg] }));
-  
-      axios(`https://honey.pandashop.uz/product/update/img/${id}`, {
-        method: "POST",
+      .get(`https://honey.pandashop.uz/product/view/${id}`, {
         headers: {
-          "Content-Type": "multipart/form-data",
-          token: "Admin tokeni",
-        },
-        data: formData,
-        onUploadProgress: (e) => {
-          dispatch(acUpload({ jami: e.total, yuklandi: e.loaded, start:e.total!==e.loaded}));
-          console.log(e.total!==e.loaded);
+          token: "token",
         },
       })
-        .then((res) => {
-          console.log(res.data);
-          dispatch(acUpload({ jami: 0, yuklandi: 0, start: false }));
-          setReload(!reload);
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-          dispatch(acUpload({ jami: 0, yuklandi: 0, start: false }));
-        });
+      .then((res) => {
+        toast(res.data.message);
+        setProduct(res.data);
+        setImagesData(res.data.img || []);
+        setImages(res.data.img || []);
+        dispatch(acLoading(false));
+      })
+      .catch((err) => {
+        toast(err.response.message);
+        dispatch(acLoading(false));
+      });
+  }, [id, reload, dispatch]);
+
+  function updateImg() {
+    const formData = new FormData();
+    const newImgArr = [...images];
+    const deleteImg = [imageDelete]; // img url
+
+    for (let i = 0; i < newImgArr.length; i++) {
+      formData.append("img", newImgArr[i]);
     }
+    formData.append("data", JSON.stringify({ delete: [...deleteImg] }));
+
+    axios(`https://honey.pandashop.uz/product/update/img/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        token: "Admin tokeni",
+      },
+      data: formData,
+      onUploadProgress: (e) => {
+        dispatch(
+          acUpload({
+            jami: e.total,
+            yuklandi: e.loaded,
+            start: e.total !== e.loaded,
+          })
+        );
+        console.log(e.total !== e.loaded);
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        dispatch(acUpload({ jami: 0, yuklandi: 0, start: false }));
+        setReload(!reload);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        dispatch(acUpload({ jami: 0, yuklandi: 0, start: false }));
+      });
+  }
   const data = product;
   return (
     <section id="crudContainer">
@@ -93,7 +98,7 @@ export function EditProduct() {
             .catch((err) => {
               console.log(err.response.data.message);
             });
-          updateImg();      
+          updateImg();
         }}
       >
         <input
